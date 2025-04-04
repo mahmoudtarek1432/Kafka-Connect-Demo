@@ -1,17 +1,21 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Dapper;
-using Microsoft.Data.SqlClient;
 using Npgsql;
 using Producer.DATA;
 using System.Data.Common;
 using System.Data.SqlTypes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=mydb;Username=myuser;Password=mypassword"))
+using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=postgres;Username=docker;Password=docker"))
 {
     connection.Open();
-    connection.Execute(DatabaseQueries.CreateDB);
-    connection.Execute(DatabaseQueries.CreateTable);
+    try
+    {
+        connection.Execute(DatabaseQueries.CreateDB);
+        connection.Execute(DatabaseQueries.CreateTable);
+    }
+    catch { }
+
 
     while (true)
     {
@@ -32,6 +36,7 @@ using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=
                 connection.Query<Source>(DatabaseQueries.QueryData).ToList().ForEach(x => Console.WriteLine($"Id: {x.Id}, Name: {x.Name}, Description: {x.Description}"));
                 break;
         }
+        Console.ReadLine();
         Console.Clear();
     }
 }
