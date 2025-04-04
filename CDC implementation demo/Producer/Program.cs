@@ -1,12 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Npgsql;
 using Producer.DATA;
 using System.Data.Common;
 using System.Data.SqlTypes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-using (var connection = new SqlConnection("Server=localhost;Integrated Security=true"))
+using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=mydb;Username=myuser;Password=mypassword"))
 {
     connection.Open();
     connection.Execute(DatabaseQueries.CreateDB);
