@@ -6,13 +6,14 @@ using System.Data.Common;
 using System.Data.SqlTypes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=postgres;Username=docker;Password=docker"))
+using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=cdc;Username=docker;Password=docker"))
 {
     connection.Open();
     try
     {
         connection.Execute(DatabaseQueries.CreateDB);
         connection.Execute(DatabaseQueries.CreateTable);
+        connection.Execute(DatabaseQueries.CreateTableWithIdentity);
     }
     catch { }
 
