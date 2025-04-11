@@ -22,6 +22,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka
     container_name: kafka
+    restart: always
     ports:
       - 9092:9092
     environment:
@@ -43,7 +44,10 @@ services:
       VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components,/Connectors,/usr/share/debezium-components"
     depends_on: [kafka]
+    volumes:
+      - ./kafka-connector:/Connectors
     ports:
       - 8083:8083
 
@@ -56,3 +60,21 @@ services:
     ports:
       - 8081:8081
     depends_on: [zookeeper, kafka]
+
+  mongodb:
+    container_name: mongodb
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - mongo_data:/data/db
+  
+volumes:
+  mongo_data:
+  
+
+  
